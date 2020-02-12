@@ -44,45 +44,19 @@ i = 0
 for rkey, row in products_group.iteritems():
     products_recaudation.append(sum(row))
     
-products_group = products_group.to_frame()
-products_group = products_group.assign(recaudacion=products_recaudation)
-products_group = products_group.sort_values('recaudacion', ascending=False)
+products_group = pd.DataFrame({'product_id': products_group.index, 'product_total': products_group.values}, columns=['product_id', 'product_total'])
+products_group = products_group.assign(product_recaudacion=products_recaudation)
+
+products_group.plot(y='product_recaudacion', x='product_id', kind='bar')
+
+products_group = products_group.sort_values('product_recaudacion', ascending=False)
 
 
 # Se determina el top 10 de productos con mayor recaudación
 top_products = products_group[0:10]
-top_products = top_products.drop('total', 1)
+top_products = top_products.drop('product_total', 1)
 
 # Se muestran los resultados de la recaudacion de productos y el top 10 de productos
 display(top_products.head())
-ax = top_products.hist(column='recaudacion', bins=25, grid=False, figsize=(12,8), layout=(2,1), sharex=True, color='#86bf91', zorder=2, rwidth=0.9)
-          
-# Se modifican los estilos para el histograma
-ax = ax[0]
-for x in ax:
-
-    # Despine
-    x.spines['right'].set_visible(False)
-    x.spines['top'].set_visible(False)
-    x.spines['left'].set_visible(False)
-
-    # Switch off ticks
-    x.tick_params(axis="both", which="both", bottom="off", top="off", labelbottom="on", left="off", right="off", labelleft="on")
-
-    # Draw horizontal axis lines
-    vals = x.get_yticks()
-    for tick in vals:
-        x.axhline(y=tick, linestyle='dashed', alpha=0.4, color='#eeeeee', zorder=1)
-
-    # Remove title
-    x.set_title("")
-
-    # Set x-axis label
-    x.set_xlabel("Recaudación ($)", labelpad=20, weight='bold', size=12)
-
-    # Set y-axis label
-    x.set_ylabel("ID Producto", labelpad=20, weight='bold', size=12)
-
-    # Format y-axis label
-    #x.yaxis.set_major_formatter(StrMethodFormatter('{x:,g}'))
-                    
+                   
+top_products.plot(y='product_recaudacion', x='product_id', kind='bar')
