@@ -1,6 +1,8 @@
 """
     Volumen de productos vendidos
 """
+from main import data, pd
+
 # Se agrupan los priductos por ID y se registran los cantidades de cada orden realizada
 products = data.groupby('product_id')['quantity'].agg(list)
 #display(products.head())
@@ -24,5 +26,5 @@ products = products.sort_values('product_volume', ascending=False)
 top_products = products[0:10]
 top_products = top_products.drop('product_quantity', 1)
 
-display(top_products.head())
+display(top_products)
 top_products.plot(x='product_id', y='product_volume', kind='bar')

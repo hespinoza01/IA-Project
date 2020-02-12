@@ -1,7 +1,7 @@
 """
     Recaudación venta productos
 """
-import main
+from main import data, pd
 
 products_group = data.groupby('product_id')['total'].agg(list)
 
